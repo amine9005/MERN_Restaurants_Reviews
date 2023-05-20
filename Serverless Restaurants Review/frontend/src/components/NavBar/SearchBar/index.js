@@ -9,12 +9,28 @@ import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import RestaurantDataService from "../../../Services/restaurants.js";
 
 const NavBar = () => {
-  const [age, setAge] = React.useState("");
+  const [filtter, setfiltter] = React.useState("");
+  const [searchBarValue, setSearchBarValue] = React.useState("");
+
+  const search = () => {
+    const by = filtter === "" ? "name" : filtter;
+    alert( `searching by: ${by} with value: ${searchBarValue} `);
+
+    RestaurantDataService.find(by, searchBarValue)
+      .then((res) => {
+        console.log( "searching: ",res.data);
+        alert( `res: ${JSON.stringify(res.data)}`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setfiltter(event.target.value);
   };
 
   const paperStyle = {
@@ -22,7 +38,7 @@ const NavBar = () => {
     p: "2px 4px",
     display: "flex",
     alignItems: "center",
-    width: {xs:"100%",sm:330,md:400,ml:600},
+    width: { xs: "100%", sm: 330, md: 400, ml: 600 },
     borderRadius: ".8rem",
   };
 
@@ -36,7 +52,7 @@ const NavBar = () => {
   const dividerStyle = { height: 28, m: 0.5 };
 
   const selectBoxStyle = {
-    minWidth: { xs: 30, sm: 80 },
+    minWidth: { xs: 30, sm: 100 },
   };
 
   const selectStyle = {
@@ -46,41 +62,39 @@ const NavBar = () => {
   };
 
   return (
-    <form>
-          <Paper component="form" sx={paperStyle}>
-      <InputBase
-        sx={inputBaseStyle}
-        placeholder="Find Restaurant"
-        inputProps={{ "aria-label": "find resturant" }}
-      />
-      <Divider
-        sx={{ height: 28, m: 0.5, display: { xs: "none", sm: "initial" } }}
-        orientation="vertical"
-      />
+      <Paper component="form" sx={paperStyle}>
+        <InputBase
+          sx={inputBaseStyle}
+          placeholder="Find Restaurant"
+          inputProps={{ "aria-label": "find resturant" }}
+          onChange={(event) =>{setSearchBarValue(event.target.value)}}
+        />
+        <Divider
+          sx={{ height: 28, m: 0.5, display: { xs: "none", sm: "initial" } }}
+          orientation="vertical"
+        />
 
-      <Box sx={selectBoxStyle}>
-        <FormControl fullWidth>
-          <Select
-            value={age}
-            onChange={handleChange}
-            displayEmpty
-            sx={selectStyle}
-          >
-            <MenuItem value="">Name</MenuItem>
-            <MenuItem value="zipcode">Zipcode</MenuItem>
-            <MenuItem value="cuisine">Cuisine</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+        <Box sx={selectBoxStyle}>
+          <FormControl fullWidth>
+            <Select
+              value={filtter}
+              onChange={handleChange}
+              displayEmpty
+              sx={selectStyle}
+            >
+              <MenuItem value="">Name</MenuItem>
+              <MenuItem value="zipcode">Zipcode</MenuItem>
+              <MenuItem value="cuisine">Cuisine</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
 
-      <Divider sx={dividerStyle} orientation="vertical" />
+        <Divider sx={dividerStyle} orientation="vertical" />
 
-      <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
-        <SearchIcon />
-      </IconButton>
-    </Paper>
-    </form>
-
+        <IconButton onClick={(event)=>search()} sx={{ p: "10px" }} aria-label="search">
+          <SearchIcon />
+        </IconButton>
+      </Paper>
   );
 };
 

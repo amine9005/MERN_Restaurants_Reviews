@@ -15,7 +15,7 @@ const NavBar = () => {
       <Box>
         <AppBar position="static">
           <Toolbar>
-            <Grid container spacing={0}>
+            <Grid container spacing={0} sx={{ p:0,m:0 }}>
               <Grid item xs={12}>
                 <Toolbar
                   sx={{
