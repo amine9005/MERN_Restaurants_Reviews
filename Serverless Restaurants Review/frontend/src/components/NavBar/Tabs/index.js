@@ -1,9 +1,40 @@
-import React from 'react'
+import * as React from 'react';
+import { Button, Grid } from '@mui/material';
 
-const Tabs = () => {
+
+
+
+
+const NavTabs = () => {
+
+
   return (
-    <div>Tabs</div>
-  )
+    <Grid
+        container
+        direction="row"
+        justifyContent="space-evenly"
+        alignItems="center"
+        >
+            <Grid item xs={3}>
+                <Button variant='filled' fullWidth>
+                    Home
+                </Button>
+            </Grid>
+
+            <Grid item xs={3}>
+            <Button variant='filled' fullWidth>
+                    Home
+                </Button>
+            </Grid>
+
+            <Grid item xs={3}>
+            <Button variant='filled' fullWidth>
+                    Home
+                </Button>
+            </Grid>
+
+    </Grid>
+  );
 }
 
-export default Tabs
+export default NavTabs;

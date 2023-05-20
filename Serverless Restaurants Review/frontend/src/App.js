@@ -3,7 +3,6 @@ import './App.scss';
 import AddReview from './components/AddReview';
 import Layout from './components/Layout';
 import Home from './components/Home';
-import NavBar from './components/NavBar';
 
 function App() {
   return (

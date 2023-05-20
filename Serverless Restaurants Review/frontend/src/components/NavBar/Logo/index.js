@@ -12,10 +12,10 @@ const Logo = () => {
       edge="start"
       color="inherit"
       aria-label="menu"
-      sx={{ mr: 0.5 }}
+      sx={{ mr: 0.5,p:0,ml:".5rem" }}
       disableRipple={true}
     >
-      <MenuBookIcon sx={{ fontSize: 40 }} />
+      <MenuBookIcon sx={{ fontSize: 60 }} />
       <Typography sx={titleStyle} variant="h6">
         Restaurants Finder
       </Typography>

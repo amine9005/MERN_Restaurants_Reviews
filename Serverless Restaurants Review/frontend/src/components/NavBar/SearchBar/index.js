@@ -22,38 +22,43 @@ const NavBar = () => {
     p: "2px 4px",
     display: "flex",
     alignItems: "center",
-    width: 600,
-    borderRadius:".5rem",
+    width: {xs:"100%",sm:330,md:400,ml:600},
+    borderRadius: ".8rem",
   };
 
   const inputBaseStyle = {
-    minWidth: { xm: 80, sm: 200 },
+    minWidth: { xs: 70, sm: 120 },
     ml: 1,
     flex: 1,
-    fontSize: {xs:"1rem",sm:"1.5rem"},
+    fontSize: { xs: "1rem", sm: "1.5rem" },
   };
 
   const dividerStyle = { height: 28, m: 0.5 };
 
-  const selectBoxStyle = { display:{xs:"none",sm:"initial"}, minWidth: { xm: 60, sm: 120 } };
+  const selectBoxStyle = {
+    minWidth: { xs: 30, sm: 80 },
+  };
 
   const selectStyle = {
     fontSize: "1rem",
     boxShadow: "none",
     ".MuiOutlinedInput-notchedOutline": { border: 0 },
-  }
+  };
 
   return (
-    <Paper component="form" sx={paperStyle}>
+    <form>
+          <Paper component="form" sx={paperStyle}>
       <InputBase
         sx={inputBaseStyle}
         placeholder="Find Restaurant"
         inputProps={{ "aria-label": "find resturant" }}
       />
-      <Divider sx={{ height: 28, m: 0.5,display:{xs:"none",sm:"initial"} }} orientation="vertical" />
+      <Divider
+        sx={{ height: 28, m: 0.5, display: { xs: "none", sm: "initial" } }}
+        orientation="vertical"
+      />
 
       <Box sx={selectBoxStyle}>
-
         <FormControl fullWidth>
           <Select
             value={age}
@@ -70,10 +75,12 @@ const NavBar = () => {
 
       <Divider sx={dividerStyle} orientation="vertical" />
 
-      <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+      <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
         <SearchIcon />
       </IconButton>
     </Paper>
+    </form>
+
   );
 };
 
