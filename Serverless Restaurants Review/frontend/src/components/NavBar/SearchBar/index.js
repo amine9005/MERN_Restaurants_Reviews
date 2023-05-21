@@ -10,24 +10,48 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import RestaurantDataService from "../../../Services/restaurants.js";
+import { useDispatch } from "react-redux";
+import { setRestaurants } from "../../../Redux/RestaurantsReducer.js";
 
 const NavBar = () => {
   const [filtter, setfiltter] = React.useState("");
   const [searchBarValue, setSearchBarValue] = React.useState("");
+  const dispatch = useDispatch();
 
   const search = () => {
     const by = filtter === "" ? "name" : filtter;
-    alert( `searching by: ${by} with value: ${searchBarValue} `);
-
-    RestaurantDataService.find(by, searchBarValue)
+    console.log(`searching by: ${by} with value: ${searchBarValue} `);
+    if (searchBarValue.length > 2 ||searchBarValue.length===0 ) {
+      RestaurantDataService.find(searchBarValue,by,0 )
       .then((res) => {
-        console.log( "searching: ",res.data);
-        alert( `res: ${JSON.stringify(res.data)}`);
+        console.log("searching: ", res.data);
+        dispatch(
+          setRestaurants({
+            data: res.data.restaurants,
+            error: false,
+          })
+        );
       })
       .catch((err) => {
         console.log(err);
+        dispatch(
+          setRestaurants({
+            data: [],
+            error: true,
+          })
+        );
       });
+    } else {
+      console.log("search term too short")
+    }
+    
   };
+
+  const searchOnEnter = (e)=>{
+    if (e.key === "Enter") {
+      search();
+    }
+  }
 
   const handleChange = (event) => {
     setfiltter(event.target.value);
@@ -62,39 +86,47 @@ const NavBar = () => {
   };
 
   return (
-      <Paper component="form" sx={paperStyle}>
-        <InputBase
-          sx={inputBaseStyle}
-          placeholder="Find Restaurant"
-          inputProps={{ "aria-label": "find resturant" }}
-          onChange={(event) =>{setSearchBarValue(event.target.value)}}
-        />
-        <Divider
-          sx={{ height: 28, m: 0.5, display: { xs: "none", sm: "initial" } }}
-          orientation="vertical"
-        />
+    <Paper component="form" sx={paperStyle}>
+      <InputBase
+        sx={inputBaseStyle}
+        placeholder="Find Restaurant"
+        inputProps={{ "aria-label": "find resturant" }}
+        value={searchBarValue}
+        onChange={(event) => {
+          setSearchBarValue(event.target.value);
+        }}
+        onKeyUp={(event)=> searchOnEnter(event)}
+      />
+      <Divider
+        sx={{ height: 28, m: 0.5, display: { xs: "none", sm: "initial" } }}
+        orientation="vertical"
+      />
 
-        <Box sx={selectBoxStyle}>
-          <FormControl fullWidth>
-            <Select
-              value={filtter}
-              onChange={handleChange}
-              displayEmpty
-              sx={selectStyle}
-            >
-              <MenuItem value="">Name</MenuItem>
-              <MenuItem value="zipcode">Zipcode</MenuItem>
-              <MenuItem value="cuisine">Cuisine</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
+      <Box sx={selectBoxStyle}>
+        <FormControl fullWidth>
+          <Select
+            value={filtter}
+            onChange={handleChange}
+            displayEmpty
+            sx={selectStyle}
+          >
+            <MenuItem value="">Name</MenuItem>
+            <MenuItem value="zipcode">Zipcode</MenuItem>
+            <MenuItem value="cuisine">Cuisine</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-        <Divider sx={dividerStyle} orientation="vertical" />
+      <Divider sx={dividerStyle} orientation="vertical" />
 
-        <IconButton onClick={(event)=>search()} sx={{ p: "10px" }} aria-label="search">
-          <SearchIcon />
-        </IconButton>
-      </Paper>
+      <IconButton
+        onClick={(event) => search()}
+        sx={{ p: "10px" }}
+        aria-label="search"
+      >
+        <SearchIcon />
+      </IconButton>
+    </Paper>
   );
 };
 

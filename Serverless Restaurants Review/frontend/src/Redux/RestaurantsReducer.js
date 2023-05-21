@@ -9,7 +9,7 @@ const restaurantsSlice = createSlice({
         error:false,
     },
     reducers: {
-        getRestaurants: (state, action) =>{
+        setRestaurants: (state, action) =>{
             state.isLoading = false;
             state.data = action.payload.data;
             state.error = action.payload.error;
@@ -19,5 +19,5 @@ const restaurantsSlice = createSlice({
 })
 
 
-export const {getRestaurants} = restaurantsSlice.actions
+export const {setRestaurants} = restaurantsSlice.actions
 export default restaurantsSlice.reducer

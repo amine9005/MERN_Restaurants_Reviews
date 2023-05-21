@@ -9,7 +9,6 @@ const RestaurantCard = (restaurantJSON) => {
   const buttonStyle = { minHeight: "100%",fontSize:{sx:"1rem",sm:"1.2rem"} }
   const restaurant = restaurantJSON.restaurant
   
-
   return (
     <Card
       style={{
@@ -37,7 +36,7 @@ const RestaurantCard = (restaurantJSON) => {
 
         <Grid item xs={12}>
           <Typography variant="h6">
-            <b>Address:</b> {restaurant.address.building || "<building>"} ,
+            <b>Address:</b> Building {restaurant.address.building || "<building>"} , 
             {restaurant.address.street || "<street>"}
           </Typography>
         </Grid>
