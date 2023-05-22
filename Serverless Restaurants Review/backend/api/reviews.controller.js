@@ -6,6 +6,7 @@ export default class ReviewsController {
       const restaurant_id = req.body.restaurant_id
       const review = req.body.text
       const rating = req.body.rating
+      const title = req.body.title
       const userInfo = {
         name: req.body.name,
         _id: req.body.user_id
@@ -17,6 +18,7 @@ export default class ReviewsController {
         userInfo,
         review,
         rating,
+        title,
         date,
       )
       res.status(200).json({ status: "review added seccussfuly" })

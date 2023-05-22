@@ -8,6 +8,10 @@ class RestaurantDataService {
     find(query, by = "name", page = 0) {
         return http.get(`?${by}=${query}&page=${page}`);
       } 
+    
+    getRestaurantByIdWithReviews(id) {
+        return http.get(`/id/${id}`);
+    }
 }
 
 export default new RestaurantDataService();

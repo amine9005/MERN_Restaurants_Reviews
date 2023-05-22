@@ -3,27 +3,36 @@ import React from "react";
 // import { Restaurant } from "@mui/icons-material";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { NavLink } from "react-router-dom";
 
 const RestaurantCard = (restaurantJSON) => {
+  const buttonStyle = {
+    minHeight: "100%",
+    fontSize: { sx: "1rem", sm: "1.2rem" },
+  };
+  const restaurant = restaurantJSON.restaurant;
 
-  const buttonStyle = { minHeight: "100%",fontSize:{sx:"1rem",sm:"1.2rem"} }
-  const restaurant = restaurantJSON.restaurant
-  
+  const iconStyle = {
+    fontSize: { xs: 25, sm: 40 },
+    mr: { xs: ".2rem", sm: "1rem" },
+  };
+
+  const address = `${restaurant.address.building} ${restaurant.address.street}, ${restaurant.address.zipcode}`;
+
   return (
     <Card
       style={{
         minHeight: 180,
-        minWidth: 240,
+        minWidth: 220,
         margin: "0",
-        padding: ".5rem .5rem",
+        padding: "0rem",
         borderRadius: "2rem",
       }}
       elevation={2}
-      
     >
       <Grid container sx={{ padding: ".8rem" }} spacing={1.5}>
         <Grid item xs={12}>
-          <Typography variant="h4" align="center" >
+          <Typography variant="h4" align="center">
             {restaurant.name || "Restaurant Title"}
           </Typography>
         </Grid>
@@ -36,56 +45,29 @@ const RestaurantCard = (restaurantJSON) => {
 
         <Grid item xs={12}>
           <Typography variant="h6">
-            <b>Address:</b> Building {restaurant.address.building || "<building>"} , 
-            {restaurant.address.street || "<street>"}
+            <b>Address:</b> {address || "<address>"}
           </Typography>
-        </Grid>
-
-        {/* <Grid item xs={12}>
-          <Typography variant="h6">
-            <b>Buiilding:</b> {restaurant.address.building || "<building>"} 
-           
-          </Typography>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography variant="h6">
-            <b>Street:</b> {restaurant.address.street || "<street>"},
-
-          </Typography>
-        </Grid> */}
-
-        {/* <Grid item xs={12}>
-          <Typography variant="h6">
-            <b>Address:</b> {restaurant.address.building || "<building>"} ,
-            {restaurant.address.street || "<street>"},
-            {restaurant.address.zipcode || "<zipcode>"}
-          </Typography>
-        </Grid> */}
-
-        <Grid item xs={6}>
-          <Button
-            variant="outlined"
-            startIcon={<VisibilityIcon />}
-            fullWidth
-            sx={buttonStyle}
-          >
-            View Reviews
-          </Button>
         </Grid>
 
         <Grid item xs={6}>
-          <Button
-            variant="outlined"
-            startIcon={<TravelExploreIcon />}
-            fullWidth
-            sx={buttonStyle}
-          >
-            View Map
+          <NavLink to={"/view/"+restaurant._id} >
+          <Button variant="outlined" size="large" fullWidth sx={buttonStyle}>
+            <VisibilityIcon sx={iconStyle} /> View Reviews
           </Button>
+          </NavLink>
         </Grid>
 
-
+        <Grid item xs={6}>
+          <a
+            rel="noreferrer"
+            target="_blank"
+            href={"https://www.google.com/maps/place/" + address}
+          >
+            <Button variant="outlined" size="large" fullWidth sx={buttonStyle}>
+              <TravelExploreIcon sx={iconStyle} /> View Map
+            </Button>
+          </a>
+        </Grid>
       </Grid>
     </Card>
   );
