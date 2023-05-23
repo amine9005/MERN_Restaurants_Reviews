@@ -65,7 +65,7 @@ const ReviewCard = (reviewJSON) => {
 
       <Grid item xs={12}>
         <Typography variant="h5" >
-          <strong>Date: </strong>{review.date}
+          <strong>Date: </strong>{review.date.split("T")[0]}
         </Typography>
       </Grid>
 

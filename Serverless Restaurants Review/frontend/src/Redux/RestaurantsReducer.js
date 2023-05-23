@@ -10,7 +10,7 @@ const restaurantsSlice = createSlice({
     },
     reducers: {
         setRestaurants: (state, action) =>{
-            state.isLoading = false;
+            state.isLoading = action.payload.isLoading;
             state.data = action.payload.data;
             state.error = action.payload.error;
         }

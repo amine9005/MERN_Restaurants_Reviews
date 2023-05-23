@@ -22,6 +22,12 @@ const NavBar = () => {
   const dispatch = useDispatch();
   
   const search = () => {
+    dispatch(
+      setRestaurants({
+        isLoading: true,
+        data: null,
+        error: false,
+      }) );
     const by = filtter === "" ? "name" : filtter;
     console.log(`searching by: ${by} with value: ${searchBarValue} `);
     if (searchBarValue.length > 2 ||searchBarValue.length===0 ) {
@@ -48,8 +54,6 @@ const NavBar = () => {
     } else {
       console.log("search term too short")
     }
-
-    
 
     
   };
@@ -79,7 +83,7 @@ const NavBar = () => {
   };
 
   const inputBaseStyle = {
-    minWidth: { xs: 70, sm: 100 },
+    minWidth: { xs: 70, sm: 100,md:160 },
     ml: 1,
     flex: 1,
     fontSize: { xs: "1rem", sm: "1.5rem" },
@@ -88,7 +92,7 @@ const NavBar = () => {
   const dividerStyle = { height: 28, m: 0.5 };
 
   const selectBoxStyle = {
-    minWidth: { xs: 30, sm: 80 },
+    minWidth: { xs: 30, sm: 80,md:120 },
     fontSize: "1.5rem",
   };
 

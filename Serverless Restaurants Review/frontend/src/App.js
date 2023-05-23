@@ -4,7 +4,8 @@ import AddReview from './components/AddReview';
 import Layout from './components/Layout';
 import Home from './components/Home';
 import RestaurantView from './components/RestaurantView';
-import ReviewCard from './components/RestaurantView/ReviewsCard';
+import Login from './components/Login';
+import Register from './components/Register';
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
           <Route index='/' element={<Home/>}/>
           <Route path='/add' element={<AddReview/>}/>
           <Route path='/view/:id' element={<RestaurantView/>}/>
+          <Route path='/login' element={<Login/>}/>
+          <Route path='/register' element={<Register/>}/>
         </Route>
       </Routes>
     </>
