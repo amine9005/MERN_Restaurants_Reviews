@@ -17,7 +17,7 @@ const Home = () => {
     if ( (restaurants.length === 0 && generalSelector.searching === false) || generalSelector.reset) {
       RestaurantDataService.getAll()
         .then((response) => {
-          console.log("home , restaurants :", response.data);
+          // console.log("home , restaurants :", response.data);
           dispatch(
             setRestaurants({
               data: response.data.restaurants,
@@ -36,9 +36,9 @@ const Home = () => {
         });
         dispatch(setGeneral({searching:false,rest:false}));
     }
-    console.log("Home Updating")
+    // console.log("Home Updating")
     setRestaurantsState(restaurantsSelector);
-  });
+  },[generalSelector.reset,dispatch,restaurants.length,generalSelector.searching,restaurantsSelector]);
 
   return (
     <Grid
@@ -64,8 +64,8 @@ const Home = () => {
       ) : restaurants.data ? (
         restaurants.data.length > 0 ? (
           restaurants.data.map((restaurant) => (
-            <Grid item xs={12} sm={12} md={6} lg={4}>
-              <RestaurantCard restaurant={restaurant} />
+            <Grid key={restaurant._id} item xs={12} sm={12} md={6} lg={4}>
+              <RestaurantCard key={restaurant._id} restaurant={restaurant} />
             </Grid>
           ))
         ) : (

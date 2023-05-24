@@ -18,7 +18,7 @@ const RestaurantView = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [id]);
 
   const address = restaurant
     ? `${restaurant.data.address.building} ${restaurant.data.address.street} , ${restaurant.data.address.zipcode}`
@@ -27,12 +27,12 @@ const RestaurantView = () => {
   const theme = createTheme();
 
   theme.typography.h3 = {
-    fontSize: '2.5rem',
+    fontSize: '2rem',
     [theme.breakpoints.up('sm')]: {
-      fontSize: '3rem',
+      fontSize: '2.5rem',
     },
     [theme.breakpoints.up('md')]: {
-      fontSize: '3.5rem',
+      fontSize: '3rem',
     },
   };
 
@@ -53,13 +53,13 @@ const RestaurantView = () => {
               </Grid>
 
               <Grid item xs={12}>
-                <Typography variant="h4" color="#000">
+                <Typography variant="h5" color="#000">
                   <strong>Cuisine: </strong> {restaurant.data.cuisine}
                 </Typography>
               </Grid>
 
               <Grid item xs={12}>
-                <Typography variant="h4" color="#000">
+                <Typography variant="h5" color="#000">
                   <strong>Adress: </strong> {address}
                 </Typography>
               </Grid>
@@ -71,7 +71,7 @@ const RestaurantView = () => {
 
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography variant="h3" color="#000" align="left">
+              <Typography variant="h4" color="#000" align="left">
                 Reviews
               </Typography>
             </Grid>

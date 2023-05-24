@@ -2,12 +2,11 @@ import { Button, Card, Grid, Rating, Typography } from "@mui/material";
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
-import { NavLink } from "react-router-dom";
 
 const ReviewCard = (reviewJSON) => {
   const buttonStyle = {
     minHeight: "100%",
-    fontSize: { sx: "1rem", sm: "1.2rem" },
+    fontSize: { sx: ".8rem", sm: ".8rem" },
   };
   const review = reviewJSON.review;
 
@@ -15,7 +14,7 @@ const ReviewCard = (reviewJSON) => {
   console.log("rating: "+parseFloat(review.rating));
 
   const iconStyle = {
-    fontSize: { xs: 25, sm: 40 },
+    fontSize: { xs: 20, sm: 30 },
     mr: { xs: ".2rem", sm: "1rem" },
   };
 
@@ -31,7 +30,7 @@ const ReviewCard = (reviewJSON) => {
       elevation={2}
     > 
       {review ? 
-      <Grid container sx={{ padding: ".8rem" }} spacing={1.5}>
+      <Grid container sx={{ padding: ".8rem" }} spacing={.5}>
 
       <Grid item xs={12}>
         <Typography variant="h4" align="center">
@@ -52,19 +51,19 @@ const ReviewCard = (reviewJSON) => {
       </Grid>
 
       <Grid item xs={12}>
-        <Typography variant="h4">
+        <Typography variant="h6">
           {review.text}
         </Typography>
       </Grid>
 
       <Grid item xs={12}>
-        <Typography variant="h5" >
+        <Typography variant="h6" >
           <strong>User: </strong>{review.name}
         </Typography>
       </Grid>
 
       <Grid item xs={12}>
-        <Typography variant="h5" >
+        <Typography variant="h6" >
           <strong>Date: </strong>{review.date.split("T")[0]}
         </Typography>
       </Grid>

@@ -14,13 +14,14 @@ const generalSlice = createSlice({
         setGeneral: (state, action) =>{
             state.searching = action.payload.searching;
             state.reset = action.payload.reset;
+        },
+        updateCurrentUser(state,action){
             state.user_id = action.payload.user_id;
             state.user_name = action.payload.user_name;
-            
         }
     }
 })
 
 
-export const {setGeneral} = generalSlice.actions
+export const {setGeneral,updateCurrentUser} = generalSlice.actions
 export default generalSlice.reducer

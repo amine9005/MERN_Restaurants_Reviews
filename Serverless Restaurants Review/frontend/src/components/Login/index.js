@@ -10,14 +10,15 @@ import {
 
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword,signOut } from "firebase/auth";
 import { auth } from "../../firebase.js";
 import { useNavigate } from "react-router-dom";
-import { setGeneral } from "../../Redux/GeneralReducer.js";
+import { setGeneral, updateCurrentUser } from "../../Redux/GeneralReducer";
 import { useDispatch } from "react-redux";
+import RestaurantDataService from "../../Services/restaurants.js";
 
 const Login = () => {
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,13 +49,39 @@ const dispatch = useDispatch();
     setEmail(value);
   };
 
+  const getUserData = (user) => {
+    RestaurantDataService.getUserByUID(user.uid)
+      .then((response) => {
+
+        dispatch(
+          setGeneral({
+            searching: false,
+            reset: true,
+          })
+        )
+        dispatch(
+          updateCurrentUser({
+            user_name: response.data.name,
+            user_id: user.uid,
+          }));
+        navigate("/");
+      })
+      .catch((error) => {
+        signOut(auth).then(() => {
+            console.log("logout with success, server error");
+        }).catch((error) => {
+            console.log("logout with error, server error");
+        })
+        console.log(error);
+        return error.messeage;
+      });
+  };
+
   const handleSubmit = (e) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log("user uid: ", user.uid);
-        dispatch(setGeneral({user_id: user.uid,reset:true}));
-        navigate("/");
+        getUserData(user)
       })
       .catch((err) => {
         const errorCode = err.code;

@@ -16,9 +16,9 @@ export default class UsesrDAO{
         }
     }
 
-    static async getUser(id){
+    static async getUser(uid){
             try{
-                const response = await users.findOne({id:id});
+                const response = await users.findOne({uid:uid});
                 return response 
             } catch (e){
                 console.log("Unable to connect to Find user: "+e);

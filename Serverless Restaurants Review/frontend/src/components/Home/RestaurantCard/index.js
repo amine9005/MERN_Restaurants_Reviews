@@ -8,12 +8,12 @@ import { NavLink } from "react-router-dom";
 const RestaurantCard = (restaurantJSON) => {
   const buttonStyle = {
     minHeight: "100%",
-    fontSize: { sx: "1rem", sm: "1.2rem" },
+    fontSize: { sx: ".8rem", sm: "1rem" },
   };
   const restaurant = restaurantJSON.restaurant;
 
   const iconStyle = {
-    fontSize: { xs: 25, sm: 40 },
+    fontSize: { xs: 20, sm: 30 },
     mr: { xs: ".2rem", sm: "1rem" },
   };
 

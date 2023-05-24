@@ -17,7 +17,6 @@ export default class UsersController {
     static async apiGetUser(req,res,next){
         try{
             const user_id = req.params.id
-            console.log(`User ${user_id}`)
             const response = await UsersDAO.getUser(user_id)
             res.status(200).json(response)
         } catch(err){
