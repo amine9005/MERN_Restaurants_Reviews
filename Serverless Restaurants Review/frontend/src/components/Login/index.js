@@ -110,7 +110,7 @@ const Login = () => {
         sx={{
           maxWidth: 600,
           borderRadius: "2rem",
-          margin: "auto",
+          margin: "3rem auto",
           padding: "1rem",
         }}
         elevation={4}

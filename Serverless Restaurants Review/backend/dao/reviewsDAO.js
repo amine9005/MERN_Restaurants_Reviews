@@ -21,7 +21,7 @@ export default class ReviewsDAO {
           user_id: user._id,
           date: date,
           title:title,
-          text: review,
+          review: review,
           rating: rating,
           restaurant_id: new ObjectId(restaurant_id) , 
         }
@@ -33,11 +33,11 @@ export default class ReviewsDAO {
     }
   }
 
-  static async updateReview(review_id, user_id, text,rating, date) {
+  static async updateReview(review_id, user_id, review,rating, date) {
     try {
       const updateResponse = await reviews.updateOne(
         { user_id: user_id, _id: new ObjectId(review_id)},
-        { $set: { text: text, rating:rating,date: date  } },
+        { $set: { review: review, rating:rating,date: date  } },
       )
 
       return updateResponse

@@ -4,7 +4,7 @@ export default class ReviewsController {
   static async apiPostReview(req, res, next) {
     try {
       const restaurant_id = req.body.restaurant_id
-      const review = req.body.text
+      const review = req.body.review
       const rating = req.body.rating
       const title = req.body.title
       const userInfo = {
@@ -30,14 +30,14 @@ export default class ReviewsController {
   static async apiUpdateReview(req, res, next) {
     try {
       const review_id = req.body.review_id
-      const text = req.body.text
+      const review = req.body.review
       const rating = req.body.rating
       const date = new Date()
 
       const reviewResponse = await ReviewsDAO.updateReview(
         review_id,
         req.body.user_id,
-        text,
+        review,
         rating,
         date,
       )

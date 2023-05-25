@@ -10,24 +10,26 @@ import { setGeneral, updateCurrentUser } from "../../../Redux/GeneralReducer";
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
+import Avatar from "@mui/material/Avatar";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Tooltip from "@mui/material/Tooltip";
+import Logout from "@mui/icons-material/Logout";
+
 const UserAvatar = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch();
   const generalSelector = useSelector((state) => state.general);
-  const [user,setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    setUser(generalSelector.user_id)
-  },[generalSelector.user_id])
+    setUser(generalSelector.user_id);
+  }, [generalSelector.user_id]);
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
 
   const handleSignOut = () => {
     if (user) {
-      console.log("loging out user")
+      console.log("loging out user");
       signOut(auth)
         .then(() => {
           dispatch(
@@ -35,15 +37,14 @@ const UserAvatar = () => {
               searching: false,
               reset: true,
             })
-          )
+          );
           dispatch(
             updateCurrentUser({
               user_id: null,
               user_name: null,
             })
-          )
-          console.log("user is now logged out")
-
+          );
+          console.log("user is now logged out");
         })
         .catch((erorr) => {
           console.log(erorr);
@@ -65,54 +66,99 @@ const UserAvatar = () => {
     handleSignOut();
     console.log("user id ", user);
   };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+
   return (
-    <div>
-      <IconButton
-        size="large"
-        aria-label="account of current user"
-        aria-controls="menu-appbar"
-        aria-haspopup="true"
-        onClick={handleMenu}
-        color="inherit"
-        sx={{ p: ".2rem", top: ".2rem", display: "flex" }}
+    <Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          textAlign: "center",
+          p: 0,
+          m: 0,
+        }}
       >
-        <AccountCircle
-          sx={{
-            fontSize: { xs: 60, sm: 60, md: 60 },
-            color: "#575757",
-            m: "2px",
-          }}
-        />
-      </IconButton>
+        <Tooltip title="Account settings">
+          <IconButton
+            onClick={handleClick}
+            size="small"
+            sx={{ ml: 0 }}
+            aria-controls={open ? "account-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+          >
+            {generalSelector.user_id ? (
+              <AccountCircle
+                sx={{ width: 62, height: 62, mt: ".2rem" }}
+              ></AccountCircle>
+            ) : (
+              <AccountCircle
+                sx={{ width: 62, height: 62, mt: ".2rem", color: "#fff" }}
+              ></AccountCircle>
+            )}
+          </IconButton>
+        </Tooltip>
+      </Box>
       <Menu
-        id="menu-appbar"
         anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        open={Boolean(anchorEl)}
+        id="account-menu"
+        open={open}
         onClose={handleClose}
+        onClick={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: "visible",
+            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            mt: 1.5,
+            "& .MuiAvatar-root": {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            "&:before": {
+              content: '""',
+              display: "block",
+              position: "absolute",
+              top: 0,
+              right: 30,
+              width: 10,
+              height: 10,
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        {user ? (
-          <MenuItem onClick={handleCloseAndSignOut}>Logout</MenuItem>
+        {generalSelector.user_id ? (
+          <MenuItem onClick={handleCloseAndSignOut}>
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            Logout
+          </MenuItem>
         ) : (
           <Box>
             <MenuItem onClick={(e) => handleCloseAndRedirect("/login")}>
-              Login
+              <Avatar /> Login
             </MenuItem>
             <MenuItem onClick={(e) => handleCloseAndRedirect("/register")}>
-              Register
+              <Avatar /> Register
             </MenuItem>
           </Box>
         )}
       </Menu>
-    </div>
+    </Box>
   );
 };
 

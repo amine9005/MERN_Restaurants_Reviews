@@ -9,6 +9,7 @@ const RestaurantCard = (restaurantJSON) => {
   const buttonStyle = {
     minHeight: "100%",
     fontSize: { sx: ".8rem", sm: "1rem" },
+    borderRadius: "1rem",
   };
   const restaurant = restaurantJSON.restaurant;
 

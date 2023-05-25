@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import RestaurantDataService from "../../Services/restaurants.js";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import ReviewCard from "./ReviewsCard/index.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useSelector } from "react-redux";
 
 const RestaurantView = () => {
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null);
+  const general = useSelector((state) => state.general);
 
   useEffect(() => {
     RestaurantDataService.getRestaurantByIdWithReviews(id)
@@ -27,16 +29,14 @@ const RestaurantView = () => {
   const theme = createTheme();
 
   theme.typography.h3 = {
-    fontSize: '2rem',
-    [theme.breakpoints.up('sm')]: {
-      fontSize: '2.5rem',
+    fontSize: "2rem",
+    [theme.breakpoints.up("sm")]: {
+      fontSize: "2.5rem",
     },
-    [theme.breakpoints.up('md')]: {
-      fontSize: '3rem',
+    [theme.breakpoints.up("md")]: {
+      fontSize: "3rem",
     },
   };
-
-
 
   return (
     <Box sx={{ p: 4 }}>
@@ -63,6 +63,11 @@ const RestaurantView = () => {
                   <strong>Adress: </strong> {address}
                 </Typography>
               </Grid>
+              {general.user_id && (
+                <Grid item xs={12}>
+                  <Button variant="outlined" sx={{ borderRadius:"1rem" }}><NavLink style={{ textDecoration:"none",color:"initial",fontSize:18 }} to={"/add/"+restaurant.data._id}>Add Review</NavLink></Button>
+                </Grid>
+              )}
             </Grid>
             <br />
           </Box>
@@ -81,7 +86,7 @@ const RestaurantView = () => {
                 {restaurant.data.reviews.length === 0 ? (
                   <Grid item xs={12}>
                     <Typography variant="h5" align="left">
-                      No reviews yet
+                      Be the first to add a review
                     </Typography>
                   </Grid>
                 ) : (

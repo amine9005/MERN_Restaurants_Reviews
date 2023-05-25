@@ -83,7 +83,7 @@ const NavBar = () => {
   };
 
   const inputBaseStyle = {
-    minWidth: { xs: 70, sm: 100,md:160 },
+    minWidth: { xs: 50, sm: 80,md:160 },
     ml: 1,
     flex: 1,
     fontSize: { xs: "1rem", sm: "1.5rem" },
@@ -92,7 +92,7 @@ const NavBar = () => {
   const dividerStyle = { height: 28, m: 0.5 };
 
   const selectBoxStyle = {
-    minWidth: { xs: 30, sm: 80,md:120 },
+    minWidth: { xs: 30, sm: 60,md:120 },
     fontSize: "1.5rem",
   };
 

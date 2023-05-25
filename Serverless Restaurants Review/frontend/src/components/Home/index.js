@@ -41,7 +41,7 @@ const Home = () => {
   },[generalSelector.reset,dispatch,restaurants.length,generalSelector.searching,restaurantsSelector]);
 
   return (
-    <Grid
+      <Grid
       container
       spacing={3}
       direction={restaurants.isLoading ? "column" : "row"}
