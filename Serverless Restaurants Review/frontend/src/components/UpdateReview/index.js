@@ -13,21 +13,24 @@ import {
 } from "@mui/material";
 
 import RestaurantDataService from "../../Services/restaurants.js";
-import { useSelector,useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import { updateCurrentUser } from "../../Redux/GeneralReducer.js";
+import { setReview } from "../../Redux/ReviewReducer.js";
 
-const AddReview = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [rating, setRating] = useState(2.5);
-  const [review, setReview] = useState("");
-  const [title, setTitle] = useState("");
+const EditReview = () => {
   const general = useSelector((state) => state.general);
-  const { id } = useParams();
+  const reviewObj = useSelector((state) => state.review);
+
+  console.log("reviewObj", reviewObj);
+
+  const navigate = useNavigate();
+  const [rating, setRating] = useState(parseFloat(reviewObj.rating));
+  const [reviewText, setReviewText] = useState(reviewObj.review);
+  const [title, setTitle] = useState(reviewObj.title);
+  const { review_id, restaurant_id } = useParams();
   const [titleError, setTitleError] = useState(false);
   const [reviewError, setReviewError] = useState(false);
-  const [reviews,setReviews] = useState(null)
+  const dispatch = useDispatch();
 
   const Colors = {
     primary: "#1eff00",
@@ -46,54 +49,38 @@ const AddReview = () => {
       setTitleError(true);
       return;
     }
-    if (review.length === 0) {
+    if (reviewText.length === 0) {
       setReviewError(true);
       return;
     }
     const reviewDoc = {
       title: title,
       rating: rating,
-      review: review,
+      review: reviewText,
       date: new Date(),
       user_id: general.user_id,
-      name: general.user_name,
-      restaurant_id: id,
+      review_id: review_id,
     };
-
-    const userDoc = {
-      user_id: general.user_id,
-      restaurant_id:id,
-    }
-    RestaurantDataService.linkReview(userDoc).then((response) => {
-      console.log("success", response)
-    }).catch(error => {
-      console.log("error", error);
-      return 
-    })
-
-    RestaurantDataService.postReview(reviewDoc)
+    RestaurantDataService.putReview(reviewDoc)
       .then(() => {
         console.log("review added successfully", reviewDoc);
-        navigate("/view/" + id);
+        navigate("/view/" + restaurant_id);
+        dispatch(
+          setReview({
+            available: false,
+            title: null,
+            review: null,
+            rating: null,
+          })
+        );
       })
       .catch((err) => {
         console.log("error", err);
-        return
       });
-      RestaurantDataService.getUserReviews(general.user_id).then((response) => {
-          setReviews(response.data);
-      }).catch((err) => {
-        console.log("error", err);
-      })
-      dispatch(updateCurrentUser({
-        user_id: general.user_id,
-        user_name: general.user_name,
-        user_reviews:reviews
-      }))
   };
 
   const setReviewAndError = (e) => {
-    setReview(e);
+    setReviewText(e);
     setTitleError(false);
     setReviewError(false);
   };
@@ -116,7 +103,7 @@ const AddReview = () => {
         }}
       >
         <Typography variant="h4" align="center">
-          Add Review
+          Edit Review
         </Typography>
         <CardContent>
           <Grid container spacing={2}>
@@ -125,7 +112,7 @@ const AddReview = () => {
                 <Rating
                   style={{ margin: "0 auto", fontSize: "3rem" }}
                   name="half-rating"
-                  value={rating}
+                  value={rating ?? null}
                   onChange={(e) => {
                     setRating(parseFloat(e.target.value));
                   }}
@@ -138,6 +125,7 @@ const AddReview = () => {
               <Grid item xs={12}>
                 <TextField
                   label="Title"
+                  defaultValue={title}
                   variant="outlined"
                   onChange={(e) => {
                     setTitleAndError(e.target.value);
@@ -157,6 +145,7 @@ const AddReview = () => {
                   multiline
                   rows={4}
                   label="Review"
+                  value={reviewText}
                   error={reviewError}
                   onChange={(e) => {
                     setReviewAndError(e.target.value);
@@ -190,4 +179,4 @@ const AddReview = () => {
   );
 };
 
-export default AddReview;
+export default EditReview;

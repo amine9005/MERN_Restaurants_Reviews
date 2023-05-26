@@ -31,12 +31,30 @@ export default class UsesrDAO{
             const userDoc = {
                 uid: uid,
                 name:name,
+                reviews:[]
             }
 
             return await users.insertOne(userDoc);
         } catch (e){
             console.log("Unable to connect to Add user: "+e);
                 
+        }
+    }
+
+    static async addReviewLink(user_id,restaurant_id){
+        try{
+            return await users.updateOne({uid:user_id},{$push:{reviews:restaurant_id}});
+        } catch (e){
+            console.log("Unable to connect to Add review Link: "+e);
+        }
+    }
+
+    static async getReviews(user_id){
+        try{
+            const response = await users.findOne({uid:user_id});
+            return response.reviews;
+        } catch (e){
+            console.log("Unable to connect to Get reviews: "+e);
         }
     }
 }

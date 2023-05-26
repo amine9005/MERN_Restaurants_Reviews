@@ -44,6 +44,10 @@ const UserAvatar = () => {
               user_name: null,
             })
           );
+          localStorage.removeItem('user_id')
+          localStorage.removeItem('user_name')
+          localStorage.removeItem("user_reviews");
+
           console.log("user is now logged out");
         })
         .catch((erorr) => {

@@ -1,10 +1,14 @@
-import {  Button, Card, Grid, Rating, Typography } from "@mui/material";
+import { Button, Card, Grid, Rating, Typography } from "@mui/material";
 import React from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
+import DeleteDialog from "./DeleteDialog";
+import { useNavigate } from "react-router-dom";
+import { setReview } from "../../../Redux/ReviewReducer";
 
 const ReviewCard = (reviewJSON) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const generalSelector = useSelector((state) => state.general);
   const buttonStyle = {
     minHeight: "100%",
@@ -13,13 +17,26 @@ const ReviewCard = (reviewJSON) => {
   };
   const review = reviewJSON.review;
 
-  console.log("review: " + JSON.stringify(review));
-  console.log("rating: " + parseFloat(review.rating));
+  // console.log("review: " + JSON.stringify(review));
+  // console.log("rating: " + parseFloat(review.rating));
 
   const iconStyle = {
     fontSize: { xs: 20, sm: 30 },
     mr: { xs: ".2rem", sm: "1rem" },
   };
+
+  const handleEdit = ()=>{
+    if (review) {
+      dispatch(setReview({
+        available:true,
+        title:review.title,
+        review:review.review,
+        rating:review.rating,
+      }))
+      navigate("/view/" +review.restaurant_id + "/edit/" + review._id );
+    }
+    
+  }
 
   return (
     <Card
@@ -72,29 +89,22 @@ const ReviewCard = (reviewJSON) => {
 
           {generalSelector.user_id === review.user_id && (
             <Grid item xs={6}>
-              {/* <NavLink to={"/view/"+review._id} > */}
               <Button
                 variant="outlined"
                 size="large"
                 fullWidth
                 sx={buttonStyle}
+                onClick={handleEdit}
               >
-                <DriveFileRenameOutlineIcon sx={iconStyle} /> Edit Review
+                <DriveFileRenameOutlineIcon sx={iconStyle} />
+                  Edit Review
               </Button>
-              {/* </NavLink> */}
             </Grid>
           )}
 
           {generalSelector.user_id === review.user_id && (
             <Grid item xs={6}>
-              <Button
-                variant="outlined"
-                size="large"
-                fullWidth
-                sx={buttonStyle}
-              >
-                <DeleteIcon sx={iconStyle} /> Delete Review
-              </Button>
+              <DeleteDialog review={{ review }} />
             </Grid>
           )}
         </Grid>

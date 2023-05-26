@@ -14,7 +14,7 @@ import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../firebase.js";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setGeneral,updateCurrentUser } from "../../Redux/GeneralReducer";
+import { setGeneral, updateCurrentUser } from "../../Redux/GeneralReducer";
 import RestaurantDataService from "../../Services/restaurants.js";
 
 const Register = () => {
@@ -24,6 +24,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const dispatch = useDispatch();
 
   const onPasswordChange = (value) => {
@@ -41,17 +42,23 @@ const Register = () => {
   const registerUserData = (user) => {
     RestaurantDataService.postUser(user.uid, fullName)
       .then((response) => {
-        console.log("response: ", response); 
+        console.log("response: ", response);
         dispatch(
           setGeneral({
             reset: true,
-            searching:false,
+            searching: false,
           })
         );
-        dispatch(updateCurrentUser({
-          user_name: response.data.name,
+        dispatch(
+          updateCurrentUser({
+            user_name: response.data.name,
             user_id: user.uid,
-        }))
+            user_reviews: response.data.reviews,
+          })
+        );
+        localStorage.setItem("user_id", user.uid);
+        localStorage.setItem("user_name", response.data.name);
+
         console.log("User name: ", response.user_name, " user id: ", user.uid);
         navigate("/");
       })
@@ -69,6 +76,10 @@ const Register = () => {
   };
 
   const handleSubmit = (e) => {
+    if (password !== passwordConfirm) {
+      setPasswordError(true);
+      return;
+    }
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -128,7 +139,7 @@ const Register = () => {
             <ThemeProvider theme={theme}>
               <TextField
                 fullWidth
-                error={passwordError || emailError}
+                // error={passwordError || emailError}
                 required
                 label="Full Name"
                 margin="normal"
@@ -165,6 +176,22 @@ const Register = () => {
                 type="password"
                 error={passwordError}
                 onChange={(e) => onPasswordChange(e.target.value)}
+                InputProps={{ style: { fontSize: 24, borderRadius: "1rem" } }}
+                InputLabelProps={{ style: { fontSize: 24 } }}
+              />
+            </ThemeProvider>
+          </Grid>
+
+          <Grid item xs={12}>
+            <ThemeProvider theme={theme}>
+              <TextField
+                fullWidth
+                required
+                label="Password"
+                margin="normal"
+                type="password"
+                error={passwordError}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
                 InputProps={{ style: { fontSize: 24, borderRadius: "1rem" } }}
                 InputLabelProps={{ style: { fontSize: 24 } }}
               />

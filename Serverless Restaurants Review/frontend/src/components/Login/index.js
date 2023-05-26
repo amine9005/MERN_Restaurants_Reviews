@@ -10,7 +10,7 @@ import {
 
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { signInWithEmailAndPassword,signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../firebase.js";
 import { useNavigate } from "react-router-dom";
 import { setGeneral, updateCurrentUser } from "../../Redux/GeneralReducer";
@@ -52,26 +52,31 @@ const Login = () => {
   const getUserData = (user) => {
     RestaurantDataService.getUserByUID(user.uid)
       .then((response) => {
-
         dispatch(
           setGeneral({
             searching: false,
             reset: true,
           })
-        )
+        );
         dispatch(
           updateCurrentUser({
             user_name: response.data.name,
             user_id: user.uid,
-          }));
+            user_reviews: response.data.reviews,
+          })
+        );
+        localStorage.setItem("user_id", user.uid);
+        localStorage.setItem("user_name", response.data.name);
         navigate("/");
       })
       .catch((error) => {
-        signOut(auth).then(() => {
+        signOut(auth)
+          .then(() => {
             console.log("logout with success, server error");
-        }).catch((error) => {
+          })
+          .catch((error) => {
             console.log("logout with error, server error");
-        })
+          });
         console.log(error);
         return error.messeage;
       });
@@ -81,7 +86,7 @@ const Login = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        getUserData(user)
+        getUserData(user);
       })
       .catch((err) => {
         const errorCode = err.code;

@@ -32,11 +32,14 @@ export default class ReviewsController {
       const review_id = req.body.review_id
       const review = req.body.review
       const rating = req.body.rating
+      const title = req.body.title
       const date = new Date()
+      const userId = req.body.user_id
 
       const reviewResponse = await ReviewsDAO.updateReview(
         review_id,
-        req.body.user_id,
+        userId,
+        title,
         review,
         rating,
         date,
@@ -63,7 +66,6 @@ export default class ReviewsController {
     try {
       const review_id = req.query.id
       const userId = req.body.user_id
-      console.log(review_id)
       const reviewResponse = await ReviewsDAO.deleteReview(
         review_id,
         userId,
@@ -71,6 +73,18 @@ export default class ReviewsController {
       res.status(200).json({ status: "review deleted seccussfuly" })
     } catch (e) {
       res.status(500).json({ error: `Unable to delete review: ${e.message}` })
+    }
+  }
+
+  static async apiGetReview(req, res,next) {
+    try{
+      const restaurant_id = req.query.restaurant_id
+      const user_id = req.query.user_id
+      console.log("user_id: "+user_id+" restaurant_id: "+restaurant_id)
+      const reviewResponse = await ReviewsDAO.getReview(user_id, restaurant_id)
+      res.status(200).json(reviewResponse)
+    }catch(e){
+      res.status(500).json({ error: `Unable to find review: ${e.message}` })
     }
   }
 
