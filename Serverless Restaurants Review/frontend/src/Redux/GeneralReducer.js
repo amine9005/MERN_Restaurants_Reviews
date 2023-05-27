@@ -6,24 +6,34 @@ const generalSlice = createSlice({
     initialState: {
         searching: false,
         reset:true,
+        search_value: '',
+        search_by: '',
+        current_page:1,
         user_id: localStorage.getItem("user_id") ?? null,
         user_name: localStorage.getItem("user_name") ?? null,
-        user_reviews: localStorage.getItem("user_reviews") ?? null,
-        
     },
     reducers: {
         setGeneral: (state, action) =>{
             state.searching = action.payload.searching;
             state.reset = action.payload.reset;
+
         },
         updateCurrentUser(state,action){
             state.user_id = action.payload.user_id;
             state.user_name = action.payload.user_name;
-            state.user_reviews = action.payload.user_reviews;
+        },
+        setSearchValue(state,action){
+            state.search_value = action.payload.search_value;
+            state.search_by = action.payload.search_by;
+        },setCurrentPage(state,action){
+            state.current_page = action.payload.current_page;
+        },setSearchBy(state,action){
+            state.search_by = action.payload.search_by;
         }
+        
     }
 })
 
 
-export const {setGeneral,updateCurrentUser} = generalSlice.actions
+export const {setGeneral,updateCurrentUser,setSearchValue,setCurrentPage,setSearchBy} = generalSlice.actions
 export default generalSlice.reducer

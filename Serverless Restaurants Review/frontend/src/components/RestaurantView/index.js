@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import RestaurantDataService from "../../Services/restaurants.js";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
 import ReviewCard from "./ReviewsCard/index.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useSelector, useDispatch } from "react-redux";
@@ -26,37 +26,32 @@ const RestaurantView = () => {
       });
 
     if (general.user_id) {
-      
-      RestaurantDataService.getReview(general.user_id,id)
+      RestaurantDataService.getReview(general.user_id, id)
         .then((review) => {
-
-          const reviewData = review.data[0]
-          console.log(`review: ${JSON.stringify(reviewData)}`);
+          const reviewData = review.data[0];
+          // console.log(`review: ${JSON.stringify(reviewData)}`);
 
           if (reviewData) {
-            if (reviewData.title){
+            if (reviewData.title) {
               setFoundUserReview(true);
-            setUserReviewId(reviewData._id);
-            dispatch(
-              setReview({
-                available: true,
-                title: reviewData.title,
-                review: reviewData.review,
-                rating: reviewData.rating,
-              })
-            );
+              setUserReviewId(reviewData._id);
+              dispatch(
+                setReview({
+                  available: true,
+                  title: reviewData.title,
+                  review: reviewData.review,
+                  rating: reviewData.rating,
+                })
+              );
             }
-            
           }
-          
-
         })
         .catch((error) => {
           console.log(error);
         });
     }
-    console.log(`foundUserReview: ${foundUserReview}`);
-  }, [id, general.user_id, foundUserReview,dispatch]);
+    // console.log(`foundUserReview: ${foundUserReview}`);
+  }, [id, general.user_id, foundUserReview, dispatch]);
 
   const address = restaurant
     ? `${restaurant.data.address.building} ${restaurant.data.address.street} , ${restaurant.data.address.zipcode}`
@@ -109,7 +104,12 @@ const RestaurantView = () => {
                           color: "initial",
                           fontSize: 18,
                         }}
-                        to={"/view/" +restaurant.data._id + "/edit/" + userReviewId}
+                        to={
+                          "/view/" +
+                          restaurant.data._id +
+                          "/edit/" +
+                          userReviewId
+                        }
                       >
                         Edit Review
                       </NavLink>
@@ -164,7 +164,20 @@ const RestaurantView = () => {
           </Grid>
         </Box>
       ) : (
-        "No data"
+        <Grid
+          container
+          spacing={3}
+          direction={"column"}
+          alignItems="center"
+          justifyContent="center"
+          sx={{ p: 4, minHeight: "100vh", minWidth: "100vw" }}
+        >
+          <Grid item xs={12} sm={12} md={6} lg={4}>
+            <Box sx={{ display: "flex" }}>
+              <CircularProgress size={100} />
+            </Box>
+          </Grid>
+        </Grid>
       )}
     </Box>
   );

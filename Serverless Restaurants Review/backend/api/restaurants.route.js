@@ -12,6 +12,8 @@ router.route("/users/id/:id").get(UsersCtrl.apiGetUser);
 router.route("/users/add").post(UsersCtrl.apiPostUser);
 router.route("/users/link").put(UsersCtrl.apiPutReview);
 router.route("/users/:uid/reviews").get(UsersCtrl.apiGetReviews);
+router.route("/users/:uid/reviews").put(UsersCtrl.apiPutRemoveReview);
+
 
 router
   .route("/reviews")

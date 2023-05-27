@@ -31,7 +31,6 @@ export default class UsersController {
       const response = await UsersDAO.addReviewLink(user_id, restaurant_id);
       res.status(200).json({ status: "Review added successfully" });
     } catch (err) {
-      console.log(e);
       res.status(500).json({ error: `Unable to add review: ${e.message}` });
     }
   }
@@ -43,6 +42,18 @@ export default class UsersController {
         res.status(200).json(response);
     }catch(e){
         res.status(500).json({ error: `Unable to get reviews: ${e.message}` });
+    }
+  }
+
+  static async apiPutRemoveReview(req, res, next) {
+
+    try{
+      const user_id = req.params.uid;
+      const restaurant_id = req.query.restaurant_id;
+      const response = await UsersDAO.putRemoveReview(user_id, restaurant_id)      
+      res.status(200).json({status:"Review Delete successfully"})
+    } catch(e){
+      res.status(500).json({error:`Unable to delete review link: ${e.message}`})
     }
   }
 }

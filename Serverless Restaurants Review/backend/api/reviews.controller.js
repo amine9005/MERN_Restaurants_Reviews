@@ -80,7 +80,6 @@ export default class ReviewsController {
     try{
       const restaurant_id = req.query.restaurant_id
       const user_id = req.query.user_id
-      console.log("user_id: "+user_id+" restaurant_id: "+restaurant_id)
       const reviewResponse = await ReviewsDAO.getReview(user_id, restaurant_id)
       res.status(200).json(reviewResponse)
     }catch(e){

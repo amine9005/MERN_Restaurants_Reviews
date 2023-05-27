@@ -44,6 +44,10 @@ class RestaurantDataServiceClass {
   getReview(user_id,id){
     return http.get(`/reviews?restaurant_id=${id}&user_id=${user_id}`);
   }
+
+  deleteReviewFromUser(user_id,restaurant_id) {
+    return http.put(`/users/${user_id}/reviews?restaurant_id=${restaurant_id}`);
+  }
 }
 const RestaurantDataService = new RestaurantDataServiceClass();
 export default RestaurantDataService;

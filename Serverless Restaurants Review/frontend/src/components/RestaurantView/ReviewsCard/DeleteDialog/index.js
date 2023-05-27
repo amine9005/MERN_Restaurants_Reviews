@@ -19,7 +19,7 @@ const DeleteDialog = (reviewJSON) => {
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const general = useSelector((state)=>state.general)
   const review = reviewJSON.review.review;
-
+  console.log("review: " + JSON.stringify(review))
 
   const buttonStyle = {
     minHeight: "100%",
@@ -46,8 +46,15 @@ const DeleteDialog = (reviewJSON) => {
         review_id: review._id
     }
     RestaurantDataService.deleteReview(reviewDoc).then(() =>{
-      navigate("/view/"+review.restaurant_id
-      )
+      RestaurantDataService.deleteReviewFromUser(general.user_id,review.restaurant_id)
+      .then(() =>{
+        navigate(0)
+
+      }).catch((e)=>{
+        console.log("Error deleting link from user: " + e.message)
+      })
+    }).catch((e)=>{
+      console.log(e)
     })
 
     setOpen(false);

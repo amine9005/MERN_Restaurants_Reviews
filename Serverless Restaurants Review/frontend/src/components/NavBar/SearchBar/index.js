@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
@@ -10,59 +10,77 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import RestaurantDataService from "../../../Services/restaurants.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setRestaurants } from "../../../Redux/RestaurantsReducer.js";
 import { NavLink } from "react-router-dom";
-import { setGeneral } from "../../../Redux/GeneralReducer.js";
-
+import {
+  setCurrentPage,
+  setGeneral,
+  setSearchValue,
+  // setSearchBy
+} from "../../../Redux/GeneralReducer.js";
 
 const NavBar = () => {
-  const [filtter, setfiltter] = React.useState("");
-  const [searchBarValue, setSearchBarValue] = React.useState("");
+  const [filtter, setfiltter] = useState("");
+  // const [searchBarValue, setSearchBarValue] = useState("");
   const dispatch = useDispatch();
-  
-  const search = () => {
-    dispatch(
-      setRestaurants({
-        isLoading: true,
-        data: null,
-        error: false,
-      }) );
+  const general = useSelector((state) => state.general);
+
+  const setSearchBarValue = (value) => {
     const by = filtter === "" ? "name" : filtter;
-    console.log(`searching by: ${by} with value: ${searchBarValue} `);
-    if (searchBarValue.length > 2 ||searchBarValue.length===0 ) {
-      RestaurantDataService.find(searchBarValue,by,0 )
-      .then((res) => {
-        console.log("searching: ", res.data);
-        dispatch(
-          setRestaurants({
-            data: res.data.restaurants,
-            error: false,
-          }) );
-          dispatch(setGeneral({searching:true}))
-      })
-      .catch((err) => {
-        console.log(err);
-        dispatch(
-          setRestaurants({
-            data: [],
-            error: true,
-          })
-
-        );
-      });
-    } else {
-      console.log("search term too short")
-    }
-
-    
+    dispatch(setSearchValue({ search_value:value, search_by: by }));
   };
 
-  const searchOnEnter = (e)=>{
+  const search = () => {
+    const by = filtter === "" ? "name" : filtter;
+    // console.log(`searching by: ${by} with value: ${general.search_value} `);
+    if (general.search_value.length > 1 || general.search_value.length === 0) {
+      dispatch(
+        setSearchValue({ search_value: general.search_value, search_by: by })
+      );
+      dispatch(setCurrentPage({ current_page: 1 }));
+      dispatch(
+        setRestaurants({
+          isLoading: true,
+          data: null,
+          error: false,
+          page_count: 0,
+        })
+      );
+      RestaurantDataService.find(general.search_value, by, 0)
+        .then((response) => {
+          // console.log("searching: ", response.data);
+          dispatch(
+            setRestaurants({
+              isLoading: false,
+              data: response.data.restaurants,
+              error: false,
+              page_count: parseInt(response.data.total_results / 20),
+            })
+          );
+          dispatch(setGeneral({ searching: true }));
+        })
+        .catch((err) => {
+          console.log(err);
+          dispatch(
+            setRestaurants({
+              isLoading: false,
+              page_count: 0,
+              data: [],
+              error: true,
+            })
+          );
+        });
+    } else {
+      console.log("search term too short");
+    }
+  };
+
+  const searchOnEnter = (e) => {
     if (e.key === "Enter") {
       search();
     }
-  }
+  };
 
   const handleChange = (event) => {
     setfiltter(event.target.value);
@@ -70,8 +88,7 @@ const NavBar = () => {
 
   const menuItemStyle = {
     fontSize: "1rem",
-
-  }
+  };
 
   const paperStyle = {
     m: 1,
@@ -83,7 +100,7 @@ const NavBar = () => {
   };
 
   const inputBaseStyle = {
-    minWidth: { xs: 50, sm: 80,md:160 },
+    minWidth: { xs: 50, sm: 80, md: 160 },
     ml: 1,
     flex: 1,
     fontSize: { xs: "1rem", sm: "1.5rem" },
@@ -92,7 +109,7 @@ const NavBar = () => {
   const dividerStyle = { height: 28, m: 0.5 };
 
   const selectBoxStyle = {
-    minWidth: { xs: 30, sm: 60,md:120 },
+    minWidth: { xs: 30, sm: 60, md: 120 },
     fontSize: "1.5rem",
   };
 
@@ -108,11 +125,11 @@ const NavBar = () => {
         sx={inputBaseStyle}
         placeholder="Find Restaurant"
         inputProps={{ "aria-label": "find resturant" }}
-        value={searchBarValue}
+        value={general.search_value}
         onChange={(event) => {
           setSearchBarValue(event.target.value);
         }}
-        onKeyUp={(event)=> searchOnEnter(event)}
+        onKeyUp={(event) => searchOnEnter(event)}
       />
       <Divider
         sx={{ height: 28, m: 0.5, display: { xs: "none", sm: "initial" } }}
@@ -127,26 +144,30 @@ const NavBar = () => {
             displayEmpty
             sx={selectStyle}
           >
-            <MenuItem sx={menuItemStyle} value="">Name</MenuItem>
-            <MenuItem sx={menuItemStyle} value="zipcode">Zipcode</MenuItem>
-            <MenuItem sx={menuItemStyle} value="cuisine">Cuisine</MenuItem>
+            <MenuItem sx={menuItemStyle} value="">
+              Name
+            </MenuItem>
+            <MenuItem sx={menuItemStyle} value="zipcode">
+              Zipcode
+            </MenuItem>
+            <MenuItem sx={menuItemStyle} value="cuisine">
+              Cuisine
+            </MenuItem>
           </Select>
         </FormControl>
       </Box>
 
       <Divider sx={dividerStyle} orientation="vertical" />
-      
-      <NavLink to='/'>
-      <IconButton
-        onClick={(event) => search()}
-        sx={{ p: "10px" }}
-        aria-label="search"
-      >
-        <SearchIcon />
-      </IconButton>
 
+      <NavLink to="/">
+        <IconButton
+          onClick={(event) => search()}
+          sx={{ p: "10px" }}
+          aria-label="search"
+        >
+          <SearchIcon />
+        </IconButton>
       </NavLink>
-      
     </Paper>
   );
 };

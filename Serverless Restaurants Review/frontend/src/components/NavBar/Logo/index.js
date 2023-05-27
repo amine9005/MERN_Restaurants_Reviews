@@ -1,9 +1,7 @@
 import React from "react";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { IconButton, Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setGeneral } from "../../../Redux/GeneralReducer.js";
+import { NavLink,useNavigate } from "react-router-dom";
 
 const titleStyle = {
   marginLeft: 1,
@@ -13,10 +11,12 @@ const titleStyle = {
 
 
 const Logo = () => {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const homeSearch = () => {
-    dispatch(setGeneral({searching:false,reset:true}))
+    navigate("/")
+    navigate(0)
+
   }
 
   return (

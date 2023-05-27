@@ -57,4 +57,12 @@ export default class UsesrDAO{
             console.log("Unable to connect to Get reviews: "+e);
         }
     }
+
+    static async putRemoveReview(user_id,restaurant_id){
+        try{
+            return await users.updateOne({uid:user_id},{$pull:{reviews:restaurant_id}});
+        } catch (e){
+            console.log("Unable to connect to Remove review Link: "+e);
+        }
+    }
 }
