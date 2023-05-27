@@ -9,6 +9,7 @@ const store = configureStore({
         general:GeneralReducer,
         review:ReviewReducer,
     },
+    devTools: false,
    
 })
 
