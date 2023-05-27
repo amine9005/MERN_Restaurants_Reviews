@@ -1,6 +1,6 @@
 # Restaurants Finder 
 
-live at :👉https://restaurants-finder-ynyr.onrender.com/
+<h2>live at :👉https://restaurants-finder-ynyr.onrender.com/</h2>
 
 <h3>Technologies:</h3>
 ✅MongoDB
@@ -9,7 +9,7 @@ live at :👉https://restaurants-finder-ynyr.onrender.com/
 ✅Node js
 ✅Material UI
 
-<h6>User can do the following:</h6>
+<h5>User can do the following:</h5>
 <ul>
 <li>View restaurans</li>
 <li>View restaurant reviews</li> 
